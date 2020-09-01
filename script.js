@@ -9,7 +9,7 @@ function loadJavaScript(){
     fillBoardWithBar(array, board)
     var generateButton = document.getElementById("bGenerate");
     generateButton.addEventListener("click", generateBars);
-
+    
 
 }
 
@@ -35,4 +35,6 @@ function generateBars(){
     while(randomArray.length < 10)
         randomArray.push(Math.floor(Math.random() * 16));
     fillBoardWithBar(randomArray, board)
+
+
 }
