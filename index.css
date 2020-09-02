@@ -49,6 +49,11 @@ footer{
     width: 120px;
 }
 
-#bar7{
-    background-color: rgb(78, 28, 28);
+#inputNumber{
+    display:none;
+}
+
+#foundIndex{
+    color: #f6f4e6;
+    margin-left: 1%;
 }
