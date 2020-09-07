@@ -17,10 +17,13 @@ function loadJavaScript(){
     linearSearchButton.addEventListener("click", linearSearch);
     removeDuplicatesButton = document.getElementById("bRemoveDuplicates");
     removeDuplicatesButton.addEventListener("click", removeDuplicates);
+    selectionSortButton = document.getElementById("bSelectionSort");
+    selectionSortButton.addEventListener("click", selectionSort);
     bubbleSortButton = document.getElementById("bBubbleSort");
     bubbleSortButton.addEventListener("click", bubbleSort);
     binarySearchButton = document.getElementById("bBinarySearch");
     binarySearchButton.addEventListener("click", binarySearch);
+    
 }
 
 function fillBoardWithBar(someArray, board){
@@ -50,7 +53,9 @@ function generateBars(){
     bRemoveDuplicates.disabled = false;
     bubbleSortButton.disabled = false;
     binarySearchButton.disabled = false;
+    selectionSortButton.disabled = false;
     document.getElementById("inputNumber").style.display = "block";
+    document.getElementById("foundIndex").innerHTML = "";
 }
 
 function linearSearch(){
@@ -65,50 +70,11 @@ function linearSearch(){
             }
     
         }    
-        document.getElementById("foundIndex").innerHTML = `Not Found. Number of iterations: ${numberOfIterations}`;
+        document.getElementById("foundIndex").innerHTML = `Not Found. Number of iterations: ${numberOfIterations}. Θ(n) `;
         
     } else {
         document.getElementById("foundIndex").innerHTML = `Put a number`;
     }
-}
-
-function removeDuplicates(){
-    let removedCount = 0;
-    while(board.hasChildNodes()){
-        board.removeChild(board.lastChild);
-    }
-    for (let i = 0; i < randomArray.length; i++) {
-        for(let k = i+1; k < randomArray.length; k++){
-            if(randomArray[i] == randomArray[k]){
-                removedCount++;
-                randomArray.splice(k,1);
-            } 
-        }
-    }
-    fillBoardWithBar(randomArray, board);
-    document.getElementById("foundIndex").innerHTML = "Number of bars removed: " + removedCount;
-}
-
-function bubbleSort(){
-    var temp;
-    var iterations = 0;
-    var valuesChanges = 0;
-    for (let i = 0; i < randomArray.length; i++) {
-        for (let j = 0; j < randomArray.length; j++) {
-            if(randomArray[i] < randomArray[j]){
-                temp = randomArray[j];
-                randomArray[j] = randomArray[i];
-                randomArray[i] = temp;
-                valuesChanges++;
-            }
-            iterations++;         
-        }
-    }
-    while(board.hasChildNodes()){
-        board.removeChild(board.lastChild);
-    }
-    document.getElementById("foundIndex").innerHTML = "Times iterated to sort: " + iterations + ". Numbers changed: " + valuesChanges;
-    fillBoardWithBar(randomArray, board);
 }
 
 function binarySearch(){
@@ -149,3 +115,68 @@ function binarySearch(){
     }
     console.log(randomArray);
 }
+
+function removeDuplicates(){
+    let removedCount = 0;
+    while(board.hasChildNodes()){
+        board.removeChild(board.lastChild);
+    }
+    for (let i = 0; i < randomArray.length; i++) {
+        for(let k = i+1; k < randomArray.length; k++){
+            if(randomArray[i] == randomArray[k]){
+                removedCount++;
+                randomArray.splice(k,1);
+            } 
+        }
+    }
+    fillBoardWithBar(randomArray, board);
+    document.getElementById("foundIndex").innerHTML = "Number of bars removed: " + removedCount;
+}
+
+function selectionSort(){
+    let iterations = 0;
+    let valuesChanges = 0;
+    let indexOfMinimum = 0;
+    let temp;
+    for(let i = 0; i < randomArray.length-1; i++){
+        indexOfMinimum = i;
+        for(let j = i+1; j < randomArray.length; j++){
+            if(randomArray[j] < randomArray[indexOfMinimum]){
+                indexOfMinimum = j;
+                valuesChanges++;
+            }            
+            iterations++;   
+        }
+        temp = randomArray[indexOfMinimum];
+        randomArray[indexOfMinimum] = randomArray[i];
+        randomArray[i] = temp;
+    }
+    while(board.hasChildNodes()){
+        board.removeChild(board.lastChild);
+    }
+    document.getElementById("foundIndex").innerHTML = "Times iterated to sort: " + iterations + ". Numbers changed: " + valuesChanges;
+    fillBoardWithBar(randomArray, board);
+}
+
+function bubbleSort(){
+    let temp;
+    let iterations = 0;
+    let valuesChanges = 0;
+    for (let i = 0; i < randomArray.length; i++) {
+        for (let j = 0; j < randomArray.length; j++) {
+            if(randomArray[i] < randomArray[j]){
+                temp = randomArray[j];
+                randomArray[j] = randomArray[i];
+                randomArray[i] = temp;
+                valuesChanges++;
+            }
+            iterations++;         
+        }
+    }
+    while(board.hasChildNodes()){
+        board.removeChild(board.lastChild);
+    }
+    document.getElementById("foundIndex").innerHTML = "Times iterated to sort: " + iterations + ". Numbers changed: " + valuesChanges;
+    fillBoardWithBar(randomArray, board);
+}
+
