@@ -3,15 +3,15 @@ var linearSearchButton;
 var removeDuplicatesButton;
 var bubbleSortButton;
 var binarySearchButton;
+var generateButton;
 window.addEventListener("load", loadJavaScript, false);
 var randomArray = [];
-
 
 function loadJavaScript(){
     board = document.getElementById("board");
     let array = [1,2,3,4,5];
-    fillBoardWithBar(array, board)
-    var generateButton = document.getElementById("bGenerate");
+    fillBoardWithBar(array, board);
+    generateButton = document.getElementById("bGenerate");
     generateButton.addEventListener("click", generateBars);
     linearSearchButton = document.getElementById("bLinearSearch");
     linearSearchButton.addEventListener("click", linearSearch);
@@ -22,8 +22,7 @@ function loadJavaScript(){
     bubbleSortButton = document.getElementById("bBubbleSort");
     bubbleSortButton.addEventListener("click", bubbleSort);
     binarySearchButton = document.getElementById("bBinarySearch");
-    binarySearchButton.addEventListener("click", binarySearch);
-    
+    binarySearchButton.addEventListener("click", binarySearch);    
 }
 
 function fillBoardWithBar(someArray, board){
@@ -38,24 +37,25 @@ function fillBoardWithBar(someArray, board){
         bar.style.height=`${size}px`;
         board.appendChild(bar);
     });
-
 }
 
 function generateBars(){
     randomArray = [];
-    while(board.hasChildNodes()){
-        board.removeChild(board.lastChild);
-    }
+    removeBars();
     while(randomArray.length < 10)
         randomArray.push(Math.floor(Math.random() * 16));
     fillBoardWithBar(randomArray, board)
+    enableButtons();
+    document.getElementById("inputNumber").style.display = "block";
+    document.getElementById("foundIndex").innerHTML = "";
+}
+
+function enableButtons(){
     linearSearchButton.disabled = false;
     bRemoveDuplicates.disabled = false;
     bubbleSortButton.disabled = false;
     binarySearchButton.disabled = false;
     selectionSortButton.disabled = false;
-    document.getElementById("inputNumber").style.display = "block";
-    document.getElementById("foundIndex").innerHTML = "";
 }
 
 function linearSearch(){
@@ -64,11 +64,9 @@ function linearSearch(){
         for(let i = 0; i<randomArray.length; i++){
             numberOfIterations++;
             if(randomArray[i] == document.getElementById("inputNumber").value){
-                document.getElementById("foundIndex").innerHTML = `Found at ${i}. Number of iterations: ${numberOfIterations}`;
-                document.getElementById(`bar${document.getElementById("inputNumber").value}`).style.backgroundColor = `rgb(78, 28, 28)`;
+                setFoundText(i, numberOfIterations);
                 return;
-            }
-    
+            }    
         }    
         document.getElementById("foundIndex").innerHTML = `Not Found. Number of iterations: ${numberOfIterations}. Θ(n) `;
         
@@ -84,7 +82,6 @@ function binarySearch(){
     let found = -1;
     let numberOfIterations = 0;
     if(document.getElementById("inputNumber").value){
-        
         while(min <= max){
             guess = Math.floor((min + max)/2);
             numberOfIterations++;
@@ -103,24 +100,23 @@ function binarySearch(){
         if(found == -1){
             document.getElementById("foundIndex").innerHTML = `Not found. Number of iterations: ${numberOfIterations}. <b>Only works after sorted.</b>`;
         }
-
         if(randomArray[guess] == document.getElementById("inputNumber").value){
-            document.getElementById("foundIndex").innerHTML = `Found at ${guess}. Number of iterations: ${numberOfIterations}`;
-            document.getElementById(`bar${document.getElementById("inputNumber").value}`).style.backgroundColor = `rgb(78, 28, 28)`;
+            setFoundText(guess, numberOfIterations);
             return;
-        }   
-
+        }
     } else {
         document.getElementById("foundIndex").innerHTML = `Put a number`;
     }
-    console.log(randomArray);
+}
+
+function setFoundText(i, numberOfIterations){
+    document.getElementById("foundIndex").innerHTML = `Found at ${i}. Number of iterations: ${numberOfIterations}`;
+    document.getElementById(`bar${document.getElementById("inputNumber").value}`).style.backgroundColor = `rgb(78, 28, 28)`;
 }
 
 function removeDuplicates(){
     let removedCount = 0;
-    while(board.hasChildNodes()){
-        board.removeChild(board.lastChild);
-    }
+    removeBars();
     for (let i = 0; i < randomArray.length; i++) {
         for(let k = i+1; k < randomArray.length; k++){
             if(randomArray[i] == randomArray[k]){
@@ -137,7 +133,6 @@ function selectionSort(){
     let iterations = 0;
     let valuesChanges = 0;
     let indexOfMinimum = 0;
-    let temp;
     for(let i = 0; i < randomArray.length-1; i++){
         indexOfMinimum = i;
         for(let j = i+1; j < randomArray.length; j++){
@@ -147,36 +142,38 @@ function selectionSort(){
             }            
             iterations++;   
         }
-        temp = randomArray[indexOfMinimum];
-        randomArray[indexOfMinimum] = randomArray[i];
-        randomArray[i] = temp;
+        swap(indexOfMinimum, i);
     }
-    while(board.hasChildNodes()){
-        board.removeChild(board.lastChild);
-    }
+    removeBars();
     document.getElementById("foundIndex").innerHTML = "Times iterated to sort: " + iterations + ". Numbers changed: " + valuesChanges;
     fillBoardWithBar(randomArray, board);
 }
 
+function swap(source, destination){
+    let temp = randomArray[source];
+    randomArray[source] = randomArray[destination];
+    randomArray[destination] = temp;
+}
+
 function bubbleSort(){
-    let temp;
     let iterations = 0;
     let valuesChanges = 0;
     for (let i = 0; i < randomArray.length; i++) {
         for (let j = 0; j < randomArray.length; j++) {
             if(randomArray[i] < randomArray[j]){
-                temp = randomArray[j];
-                randomArray[j] = randomArray[i];
-                randomArray[i] = temp;
+                swap(j, i);
                 valuesChanges++;
             }
             iterations++;         
         }
     }
-    while(board.hasChildNodes()){
-        board.removeChild(board.lastChild);
-    }
+    removeBars();
     document.getElementById("foundIndex").innerHTML = "Times iterated to sort: " + iterations + ". Numbers changed: " + valuesChanges;
     fillBoardWithBar(randomArray, board);
 }
 
+function removeBars(){
+    while(board.hasChildNodes()){
+        board.removeChild(board.lastChild);
+    }
+}

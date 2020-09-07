@@ -1,7 +1,7 @@
 # Visual Data Structures
 
-Random codes to visualize some algorithms 
+Random codes to test and visualize some algorithms 
 
-Just creating random arrays and show a bar graph so far
+More features to come
 
-Can be visualized at: https://mksiq.github.io/VisualDS
+Can be checked at: https://mksiq.github.io/VisualDS
